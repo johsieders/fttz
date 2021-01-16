@@ -101,6 +101,15 @@ It can be less obvious but gives some insight in how trees behave.</p>
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Write a recursive function <code>inorder(tree) -&gt; Iterator</code> which yields the inorder traversal of that tree.</li>
+</ul>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -116,6 +125,7 @@ It can be less obvious but gives some insight in how trees behave.</p>
         <span class="k">yield</span> <span class="n">tree</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">yield from</span> <span class="n">preorder</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">yield from</span> <span class="n">preorder</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -123,18 +133,23 @@ It can be less obvious but gives some insight in how trees behave.</p>
 </div>
 
     </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>hello
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Write a recursive function <code>inorder(tree) -&gt; Iterator</code> which yields the inorder traversal of that tree.</li>
-</ul>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
