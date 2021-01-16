@@ -2,7 +2,7 @@ topnav:
 - title: Topnav
   items:
     - title: github
-      external_url: https://github.com/akowasch/fttp/tree/master/
+      external_url: https://github.com/johsieders/fttp/tree/master/
 
 #Topnav dropdowns
 topnav_dropdowns:
