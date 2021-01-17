@@ -1,6 +1,6 @@
 ---
 
-title: Iterator Basics
+title: Title
 
 
 keywords: fastai
@@ -29,6 +29,96 @@ nb_path: "nbs\01_iterators1.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Iterators-and-Iterables">Iterators and Iterables<a class="anchor-link" href="#Iterators-and-Iterables"> </a></h2><p>All Python collections are iterables, that is, you get an iterator by</p>
+
+<pre><code>    xs = [1, 2, 3]
+    t = iter(xs)
+
+</code></pre>
+<p>An iterator is a recipe for computing the next element. Its main operation is</p>
+
+<pre><code>   next(t)
+</code></pre>
+<p>which applies the recipe and returns the next element. This works fine as long as there are elements left;
+the fourth call in the example above would raise <code>StopIteration</code>. Each for-loop implicitly
+applies <code>iter()</code> to what follows the in-clause:</p>
+
+<pre><code>    for x in xs:
+        for y in xs:
+            print(x, y)
+
+</code></pre>
+<p>Here, Python creates two iterators on <code>xs</code>, being iterated on independently; the for-loop gracefully handles
+<code>StopIteration</code>.</p>
+<p>What is important:</p>
+<ul>
+<li>There can be any number of iterators on a given collection</li>
+<li><p>Iterators are read-once; each <code>next</code> winds the iterator one notch down. There is no winding up.
+Iterators can however be chained, like this:</p>
+
+<pre><code>  s = chain([x], t)
+</code></pre>
+<p>creates a new iterator with <code>x</code> in front of <code>t</code>.</p>
+</li>
+<li><p>Iterators are lazy as opposed to lists which are eager. <em>Lazy</em> means, that elements are computed
+not before they are need. This allows to manage infinite series.</p>
+</li>
+<li><p>Iterators are hard to debug. The <code>take</code>-function can be helpful. Good idea: Write a list-based version first and
+convert to iterators later.</p>
+</li>
+</ul>
+<p>The class <code>Iterator</code> in <code>Collections.abc</code> is an abstract base
+class defining a single method <code>__next__()</code>. Iterators are ubiquitous but often invisible. They are created by
+ <code>Iterables</code>, another abstract base class in <code>Collections.abc</code>.</p>
+<p>An iterable is just an object which the iter-function accepts.
+There are three ways to get one:</p>
+<ol>
+<li>applying <code>iter()</code>to a collection</li>
+<li>writing a generator</li>
+<li>overloading <code>__iter__</code></li>
+</ol>
+<p>We have seen the first way, let's turn to the second.</p>
+<h3 id="Generators">Generators<a class="anchor-link" href="#Generators"> </a></h3><p>A generator is a function which
+contains at least one <code>yield</code>-statement, such as this one:</p>
+
+<pre><code>def naturals() -&gt; Iterator
+    current = 0
+    while True
+        yield current
+        current += 1
+
+</code></pre>
+<p>This generator would be used as follows:</p>
+
+<pre><code>nat = naturals()
+a = next(nat)
+b = next(nat)
+
+</code></pre>
+<p>Here is how generators work: A call of <code>naturals()</code> produces a generator objet, <code>nat</code> in this case.
+The code inside the function is executed until and excluding the first <code>yield</code>.
+In the example above, <code>current</code> is set to 0, and generator is waiting for the first call of <code>next(nat)</code>.
+On that call, the generator yields what it is supposed to and proceeds until and excluding the next <code>yield</code>:
+<code>current</code>gets incremented, the while-loop restarts and stops. This can go on forever, but of course,
+it normally doesn't. The good news is that generator gracefully handle infinity: <code>naturals()</code> delivers
+an arbitrarily many natural numbers; there is to need to define an upper bound such as, say, 1e20.
+It is up to the caller to call <code>next(nat)</code> as often as desired.</p>
+<h3 id="Overloading-__iter__">Overloading <code>__iter__</code><a class="anchor-link" href="#Overloading-__iter__"> </a></h3><h2 id="ToDo">ToDo<a class="anchor-link" href="#ToDo"> </a></h2><h3 id="Iterators-and-Iterables">Iterators and Iterables<a class="anchor-link" href="#Iterators-and-Iterables"> </a></h3><p>Iterables produce Iterators via <code>iter()</code> such as all Collections.
+Iterator yield the next element via <code>next()</code>. By convention, all Iterators
+are also Iterables; the standard implementation being to return self.
+Some examples:</p>
+<ul>
+<li><code>(0, 1, 2, 3)</code> is a tuple, no iterator</li>
+<li><code>range(4)</code> is a tuple, no iterator</li>
+<li><code>naturals()</code> is an iterator</li>
+<li><code>(1 / k for k in naturals())</code> is an iterator</li>
+</ul>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Exercise-A">Exercise A<a class="anchor-link" href="#Exercise-A"> </a></h2>
@@ -832,95 +922,6 @@ Hint: Use <code>yield</code></p>
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Iterators-and-Iterables">Iterators and Iterables<a class="anchor-link" href="#Iterators-and-Iterables"> </a></h2><p>All Python collections are iterables, that is, you get an iterator by</p>
-
-<pre><code>    xs = [1, 2, 3]
-    t = iter(xs)
-</code></pre>
-<p>An iterator is a recipe for computing the next element. Its main operation is</p>
-
-<pre><code>   next(t)
-</code></pre>
-<p>which applies the recipe and returns the next element. This works fine as long as there are elements left;
-the fourth call in the example above would raise a <code>StopIteration</code>. Each for-loop implicitly
-applies <code>iter()</code> to what follows the in-clause:</p>
-
-<pre><code>    for x in xs:
-        for y in xs:
-            print(x, y)
-
-</code></pre>
-<p>Here, Python creates two iterators on <code>xs</code>, being iterated on independently; the for-loop gracefully handles
-<code>StopIteration</code>.</p>
-<p>What is important:</p>
-<ul>
-<li>There can be any number of iterators on a given collection</li>
-<li><p>Iterators are read-once; each <code>next</code> winds the iterator one notch down. There is no winding up.
-Iterators can however be chained, like this:</p>
-
-<pre><code>  s = chain([x], t)
-</code></pre>
-<p>creates a new iterator with <code>x</code> in front of <code>t</code>.</p>
-</li>
-<li><p>Iterators are lazy as opposed to lists which are eager. <em>Lazy</em> means, that elements are computed
-not before they are need. This allows to manage infinite series.</p>
-</li>
-<li><p>Iterators are hard to debug. The <code>take</code>-function can be helpful. Good idea: Write a list-based version first and
-convert to iterators later.</p>
-</li>
-</ul>
-<p>The class <code>Iterator</code> in <code>Collections.abc</code> is an abstract base
-class defining a single method <code>__next__()</code>. Iterators are ubiquitous but often invisible. They are created by
- <code>Iterables</code>, another abstract base class in <code>Collections.abc</code>.</p>
-<p>An iterable is just an object which the iter-function accepts.
-There are three ways to get one:</p>
-<ol>
-<li>applying <code>iter()</code>to a collection</li>
-<li>writing a generator</li>
-<li>overloading <code>__iter__</code></li>
-</ol>
-<p>We have seen the first way, let's turn to the second.</p>
-<h3 id="Generators">Generators<a class="anchor-link" href="#Generators"> </a></h3><p>A generator is a function which
-contains at least one <code>yield</code>-statement, such as this one:</p>
-
-<pre><code>def naturals() -&gt; Iterator
-    current = 0
-    while True
-        yield current
-        current += 1
-
-</code></pre>
-<p>This generator would be used as follows:</p>
-
-<pre><code>nat = naturals()
-a = next(nat)
-b = next(nat)
-
-</code></pre>
-<p>Here is how generators work: A call of <code>naturals()</code> produces a generator objet, <code>nat</code> in this case.
-The code inside the function is executed until and excluding the first <code>yield</code>.
-In the example above, <code>current</code> is set to 0, and generator is waiting for the first call of <code>next(nat)</code>.
-On that call, the generator yields what it is supposed to and proceeds until and excluding the next <code>yield</code>:
-<code>current</code>gets incremented, the while-loop restarts and stops. This can go on forever, but of course,
-it normally doesn't. The good news is that generator gracefully handle infinity: <code>naturals()</code> delivers
-an arbitrarily many natural numbers; there is to need to define an upper bound such as, say, 1e20.
-It is up to the caller to call <code>next(nat)</code> as often as desired.</p>
-<h3 id="Overloading-__iter__">Overloading <code>__iter__</code><a class="anchor-link" href="#Overloading-__iter__"> </a></h3><h2 id="ToDo">ToDo<a class="anchor-link" href="#ToDo"> </a></h2><h3 id="Iterators-and-Iterables">Iterators and Iterables<a class="anchor-link" href="#Iterators-and-Iterables"> </a></h3><p>Iterables produce Iterators via <code>iter()</code> such as all Collections.
-Iterator yield the next element via <code>next()</code>. By convention, all Iterators
-are also Iterables; the standard implementation being to return self.
-Some examples:</p>
-<ul>
-<li><code>(0, 1, 2, 3)</code> is a tuple, no iterator</li>
-<li><code>range(4)</code> is a tuple, no iterator</li>
-<li><code>naturals()</code> is an iterator</li>
-<li><code>(1 / k for k in naturals())</code> is an iterator</li>
-</ul>
-
-</div>
-</div>
-</div>
 </div>
  
 
