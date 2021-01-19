@@ -2,9 +2,10 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {}
+index = {"say_hello": "00_sandbox.ipynb",
+         "HelloSayer": "00_sandbox.ipynb"}
 
-modules = []
+modules = ["core.py"]
 
 doc_url = "https://johsieders.github.io/fttp/"
 
